@@ -9,7 +9,7 @@ abstract interface class IIsarPreferences {
     T Function()? ifAbsent,
   });
 
-  Future<T> remove<T>(String key);
+  Future<void> remove<T>(String key);
 
   T getSync<T>(String key);
 
@@ -21,7 +21,7 @@ abstract interface class IIsarPreferences {
     T Function()? ifAbsent,
   });
 
-  T removeSync<T>(String key);
+  void removeSync<T>(String key);
 
   Future<T?> getOrNull<T>(String key);
 
