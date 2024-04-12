@@ -9,13 +9,20 @@ class IsarPreferences implements IIsarPreferences {
 
   static Future<IsarPreferences> openIsarPreferences({
     required String directory,
+    Map<String, dynamic>? defaultValues,
   }) async {
     final isar = await Isar.open(
       [$IsarPreferenceSchema],
       directory: directory,
     );
 
-    return IsarPreferences._(isar);
+    final isarPreferences = IsarPreferences._(isar);
+
+    if (defaultValues != null) {
+      isarPreferences._setDefaultValues(defaultValues);
+    }
+
+    return isarPreferences;
   }
 
   void close({bool deleteFromDisk = false}) {
@@ -50,7 +57,7 @@ class IsarPreferences implements IIsarPreferences {
   }) {
     return _isar.writeTxn(() async {
       final preference = await _getOrCreatePreference(key);
-      var value = preference.getValue<T>();
+      var value = preference.getValue(T);
 
       if (value != null) {
         value = update(value);
@@ -103,7 +110,7 @@ class IsarPreferences implements IIsarPreferences {
   }) {
     return _isar.writeTxnSync(() {
       final preference = _getOrCreatePreferenceSync(key);
-      var value = preference.getValue<T>();
+      var value = preference.getValue(T);
 
       if (value != null) {
         value = update(value);
@@ -131,13 +138,13 @@ class IsarPreferences implements IIsarPreferences {
   @override
   Future<T?> getOrNull<T>(String key) async {
     final preference = await _getOrCreatePreference(key);
-    return preference.getValue<T>();
+    return preference.getValue(T);
   }
 
   @override
   T? getOrNullSync<T>(String key) {
     final preference = _getOrCreatePreferenceSync(key);
-    return preference.getValue<T>();
+    return preference.getValue(T);
   }
 
   @override
@@ -146,8 +153,25 @@ class IsarPreferences implements IIsarPreferences {
         .where()
         .keyEqualTo(key)
         .watch()
-        .map<T>((event) => event.isEmpty ? event.first.getValue<T>() : null)
+        .map<T>((event) => event.isEmpty ? event.first.getValue(T) : null)
         .distinct();
+  }
+
+  Future<void> _setDefaultValues(Map<String, dynamic> values) async {
+    await _isar.writeTxn(() async {
+      for (var entry in values.entries) {
+        final key = entry.key;
+        final defaultValue = entry.value;
+
+        final preference = await _getOrCreatePreference(key);
+        final currentValue = preference.getValue(defaultValue.runtimeType);
+
+        if (currentValue == null) {
+          preference.setValue(defaultValue);
+          await _isar.$IsarPreferences.putByKey(preference);
+        }
+      }
+    });
   }
 
   Future<$IsarPreference> _getOrCreatePreference(String key) async {

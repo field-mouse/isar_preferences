@@ -22,8 +22,8 @@ class $IsarPreference {
   List<DateTime>? listDateTimeValue;
   List<String>? listStringValue;
 
-  dynamic getValue<T>() {
-    return switch (T) {
+  dynamic getValue(Type type) {
+    return switch (type) {
       const (bool) => boolValue,
       const (int) => intValue,
       const (double) => doubleValue,
@@ -34,7 +34,7 @@ class $IsarPreference {
       const (List<double>) => listDoubleValue,
       const (List<DateTime>) => listDateTimeValue,
       const (List<String>) => listStringValue,
-      _ => throw Exception('Unsupported type: ${T.runtimeType}'),
+      _ => throw Exception('Unsupported type: ${type.runtimeType}'),
     };
   }
 
