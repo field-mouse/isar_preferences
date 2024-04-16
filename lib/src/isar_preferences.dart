@@ -75,7 +75,7 @@ class IsarPreferences implements IIsarPreferences {
 
   @override
   Future<void> remove<T>(String key) async {
-    _isar.writeTxn(() async {
+    return _isar.writeTxn(() async {
       final preference = await _getOrCreatePreference(key);
       preference.setValue<T>(null);
       await _isar.$IsarPreferences.putByKey(preference);
@@ -128,7 +128,7 @@ class IsarPreferences implements IIsarPreferences {
 
   @override
   void removeSync<T>(String key) {
-    _isar.writeTxnSync(() {
+    return _isar.writeTxnSync(() {
       final preference = _getOrCreatePreferenceSync(key);
       preference.setValue<T>(null);
       _isar.$IsarPreferences.putByKeySync(preference);
