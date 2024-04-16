@@ -30,3 +30,6 @@ build/
 
 /.flutter-plugins
 /.flutter-plugins-dependencies
+/default.isar
+/default.isar.lock
+/libisar.dylib
