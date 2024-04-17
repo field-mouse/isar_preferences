@@ -7,7 +7,7 @@ class IsarPreferences implements IIsarPreferences {
 
   final Isar _isar;
 
-  static Future<IsarPreferences> openIsarPreferences({
+  static Future<IsarPreferences> open({
     required String directory,
     Map<String, dynamic>? defaultValues,
   }) async {

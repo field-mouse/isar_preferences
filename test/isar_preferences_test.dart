@@ -8,7 +8,7 @@ void main() {
   setUpAll(() async => await Isar.initializeIsarCore(download: true));
 
   setUp(() async {
-    isarPreferences = await IsarPreferences.openIsarPreferences(
+    isarPreferences = await IsarPreferences.open(
       directory: '.',
     );
   });
