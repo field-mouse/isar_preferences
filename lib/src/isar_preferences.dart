@@ -2,6 +2,8 @@ import 'package:isar/isar.dart';
 import 'package:isar_preferences/src/i_isar_preferences.dart';
 import 'package:isar_preferences/src/isar_preference.dart';
 
+const _isarInstanceName = r'$isarPreferences';
+
 class IsarPreferences implements IIsarPreferences {
   IsarPreferences._(this._isar);
 
@@ -14,6 +16,7 @@ class IsarPreferences implements IIsarPreferences {
     final isar = await Isar.open(
       [$IsarPreferenceSchema],
       directory: directory,
+      name: _isarInstanceName,
     );
 
     final isarPreferences = IsarPreferences._(isar);
