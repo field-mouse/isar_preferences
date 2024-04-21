@@ -157,11 +157,11 @@ class IsarPreferences implements IIsarPreferences {
   }
 
   @override
-  Stream<T?> watch<T>(String key) {
+  Stream<T?> watch<T>(String key, {bool fireImmediately = false}) {
     return _isar.$IsarPreferences
         .where()
         .keyEqualTo(key)
-        .watch()
+        .watch(fireImmediately: fireImmediately)
         .map<T>((event) => event.isEmpty ? event.first.getValue(T) : null)
         .distinct();
   }

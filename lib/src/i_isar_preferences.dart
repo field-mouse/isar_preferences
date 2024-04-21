@@ -27,5 +27,8 @@ abstract interface class IIsarPreferences {
 
   T? getOrNullSync<T>(String key);
 
-  Stream<T?> watch<T>(String key);
+  Stream<T?> watch<T>(
+    String key, {
+    bool fireImmediately = false,
+  });
 }
