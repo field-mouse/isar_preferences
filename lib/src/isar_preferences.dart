@@ -162,7 +162,7 @@ class IsarPreferences implements IIsarPreferences {
         .where()
         .keyEqualTo(key)
         .watch(fireImmediately: fireImmediately)
-        .map<T>((event) => event.isEmpty ? event.first.getValue(T) : null)
+        .map<T?>((event) => event.isNotEmpty ? event.first.getValue(T) : null)
         .distinct();
   }
 
