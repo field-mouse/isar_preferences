@@ -9,6 +9,8 @@ class IsarPreferences implements IIsarPreferences {
 
   final Isar _isar;
 
+  static IsarPreferences? _isarPreferencesInstance;
+
   static Future<IsarPreferences> open({
     required String directory,
     Map<String, dynamic>? defaultValues,
@@ -19,13 +21,17 @@ class IsarPreferences implements IIsarPreferences {
       name: _isarInstanceName,
     );
 
-    final isarPreferences = IsarPreferences._(isar);
+    _isarPreferencesInstance = IsarPreferences._(isar);
 
     if (defaultValues != null) {
-      isarPreferences._setDefaultValues(defaultValues);
+      _isarPreferencesInstance!._setDefaultValues(defaultValues);
     }
 
-    return isarPreferences;
+    return _isarPreferencesInstance!;
+  }
+
+  static IsarPreferences? getInstance() {
+    return _isarPreferencesInstance;
   }
 
   void close({bool deleteFromDisk = false}) {
